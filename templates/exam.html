@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block body  %}
+
+                 <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-orange panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-comment glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted">
+                                    <button type="button" class="btn btn-default btn-info" onclick="startCal()">开始答题</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-teal panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-user glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted">
+                                    <button type="button" class="btn btn-default btn-info" onclick="postAns()">提交答案</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-red panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-stats glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted">剩余时间：<p id="remain"> </p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+<div class="row clearfix" onload="clock()">
+		<div class="col-md-12 column">
+                     <table class="table table-hover" >
+                      <thead>
+						    <tr>
+						        <th data-field="ComputationalFormulas"  data-sortable="true">算式</th>
+                                <th data-field="answer" data-sortable="true">答案</th>
+                                <th data-field="TrueAns" data-sortable="true">正确答案</th>
+                                <th data-field="TrueOrFalse" data-sortable="true">对错</th>
+						    </tr>
+					</thead>
+                     {% for i in cals %}
+                         <tr >
+                         <td>{{i[0]}} </td>
+                         <td> {{ form.subAns(class="form-control postAns",placeholder="your answer") }}</td>
+                             {% if i[1]%}
+                             <td> 你的答案：{{i[1]}}  标准答案：{{i[3]}}</td>
+                             {% else %}
+                              <td> </td>
+                             {% endif %}
+
+                             {% if i[1]%}
+                             <td>{{i[2]}} </td>
+                             {% else %}
+                             <td> </td>
+                             {% endif %}
+                        </tr>
+                    {% endfor %}
+                     </table>
+        		</div>
+	</div>
+
+<script type="text/javascript">
+    var maxtime =20
+    var timer;
+    function startCal()
+    {
+        console.log('click');
+        timer = setInterval("time()",1000);
+
+    }
+    function time()
+    {
+        console.log('timestart');
+         if(maxtime>=0){
+         minutes = Math.floor(maxtime/60); //计算出分钟
+         seconds = Math.floor(maxtime%60);  //计算出秒
+         msg = minutes+"分"+seconds+"秒";
+         console.log(msg);
+         $('#remain').text(msg);
+         --maxtime;
+         }
+         else{
+         clearInterval(timer);
+         alert("时间到，考试结束!");
+         postAns();
+         }
+
+    }
+
+    function postAns()
+    {
+        var arr={}
+        $('.postAns').each(
+            function (i) {
+                arr[i+""]=$(this).val()
+            }
+        )
+        clearInterval(timer);
+        post("/index/Exam/",arr)
+    }
+
+    function post(URL, PARAMS) {
+      var temp = document.createElement("form");
+      temp.action = URL;
+      temp.method = "post";
+      temp.style.display = "none";
+      for (var x in PARAMS) {
+        var opt = document.createElement("textarea");
+        opt.name = x;
+        opt.value = PARAMS[x]; // alert(opt.name)
+        temp.appendChild(opt);
+        }
+      document.body.appendChild(temp);
+      temp.submit();
+      console.log(temp);
+      return temp;
+    }
+</script>
+{% endblock %}

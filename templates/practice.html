@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block body  %}
+       
+        <div class="row">
+                 <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-orange panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-comment glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-teal panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-user glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6 col-lg-3">
+                    <div class="panel panel-red panel-widget">
+                        <div class="row no-padding">
+                            <div class="col-sm-3 col-lg-5 widget-left">
+                                <em class="glyphicon glyphicon-stats glyphicon-l"></em>
+                            </div>
+                            <div class="col-sm-9 col-lg-7 widget-right">
+                                <div class="large"></div>
+                                <div class="text-muted"><button type="button" class="btn btn-default btn-info" onclick="Fla()">刷新题目</button></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="row clearfix">
+		<div class="col-md-12 column">
+                     <table class="table table-hover" >
+                      <thead>
+						    <tr>
+						        <th data-field="ComputationalFormulas"  data-sortable="true">算式</th>
+                                <th data-field="submit"  data-sortable="true"></th>
+                                <th data-field="button"  data-sortable="true"></th>
+                                <th data-field="answer" data-sortable="true">标准答案</th>
+						    </tr>
+					</thead>
+                     {% for i in cals %}
+                         <tr>
+                         <td>{{i[0]}} </td>
+                         <td> {{ form.subAns(class="form-control",placeholder="your answer") }}</td>
+                         <td>  <button type="button" class="btn btn-default btn-info" onclick="showAns(this)">查看答案</button></td>
+                         <td><p hidden="hidden" > {{i[1]}}</p></td>
+                        </tr>
+                    {% endfor %}
+                     </table>
+        		</div>
+	</div>
+<script type="text/javascript">
+function showAns(a)
+{
+    $(a).parent().next().children().removeAttr("hidden");
+}
+
+function Fla() {
+    window.location.reload();
+}
+
+</script>
+{% endblock %}
